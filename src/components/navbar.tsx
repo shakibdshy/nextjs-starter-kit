@@ -19,6 +19,8 @@ import {
 } from "@nextui-org/react";
 import { IconPackage, IconUser } from "@tabler/icons-react";
 
+import { ThemeSwitcher } from "./theme-switcher";
+
 const navigationItems = [
   { name: "Home", href: "/" },
   { name: "Profile", href: "/profile" },
@@ -54,6 +56,7 @@ export default function CustomNavbar() {
       </NavbarContent>
 
       <NavbarContent justify="end">
+        <ThemeSwitcher />
         {isLoggedIn ? (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
