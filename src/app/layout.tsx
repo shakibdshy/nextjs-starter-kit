@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import Provider from "@/components/provider";
+import CustomNavbar from "@/components/ui/navbar";
+import Provider from "@/config/provider";
 
 import "./globals.css";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <Provider>{children}</Provider>
+        <Provider>
+          <CustomNavbar />
+          {children}
+        </Provider>
       </body>
     </html>
   );
