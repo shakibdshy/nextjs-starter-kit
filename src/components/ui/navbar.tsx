@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -18,7 +17,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
-import { IconUser } from "@tabler/icons-react";
+import { IconPackage, IconUser } from "@tabler/icons-react";
 
 const navigationItems = [
   { name: "Home", href: "/" },
@@ -39,8 +38,9 @@ export default function CustomNavbar() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Link href="/">
-            <Image src="/logo.png" alt="Logo" width={120} height={40} />
+          <Link href="/" className="flex items-center gap-2 text-lg font-bold">
+            <IconPackage />
+            Next.js Starter Kit
           </Link>
         </NavbarBrand>
       </NavbarContent>
