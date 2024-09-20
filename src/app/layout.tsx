@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { SessionProvider } from "next-auth/react";
+
 import CustomNavbar from "@/components/navbar";
 import Provider from "@/config/provider";
 
@@ -25,10 +27,12 @@ export default function RootLayout({
         />
       </head>
       <body className="h-screen w-screen">
-        <Provider>
-          <CustomNavbar />
-          <main className="flex-grow">{children}</main>
-        </Provider>
+        <SessionProvider>
+          <Provider>
+            <CustomNavbar />
+            <main className="flex-grow">{children}</main>
+          </Provider>
+        </SessionProvider>
       </body>
     </html>
   );

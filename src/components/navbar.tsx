@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -18,6 +19,7 @@ import {
   NavbarMenuToggle,
 } from "@nextui-org/react";
 import { IconPackage, IconUser } from "@tabler/icons-react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { ThemeSwitcher } from "./theme-switcher";
 
@@ -29,8 +31,17 @@ const navigationItems = [
 
 export default function CustomNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // This should be replaced with your actual authentication logic
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { data: session, status } = useSession();
+
+  const handleSignIn = () => {
+    signIn("google");
+  };
+
+  const handleSignOut = () => {
+    signOut();
+  };
+
+  console.log("image", session?.user?.image!);
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -57,37 +68,38 @@ export default function CustomNavbar() {
 
       <NavbarContent justify="end">
         <ThemeSwitcher />
-        {isLoggedIn ? (
+        {status === "authenticated" && session?.user ? (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Button isIconOnly variant="light" aria-label="Profile">
-                <IconUser />
+                {session.user ? (
+                  <Image
+                    src={session.user.image!}
+                    alt={session.user.name!}
+                    width={100}
+                    height={100}
+                  />
+                ) : (
+                  <IconUser />
+                )}
               </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">user@example.com</p>
+                <p className="font-semibold">{session.user.email}</p>
               </DropdownItem>
               <DropdownItem key="settings">My Settings</DropdownItem>
               <DropdownItem key="help_and_feedback">
                 Help & Feedback
               </DropdownItem>
-              <DropdownItem
-                key="logout"
-                color="danger"
-                onPress={() => setIsLoggedIn(false)}
-              >
+              <DropdownItem key="logout" color="danger" onPress={handleSignOut}>
                 Log Out
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         ) : (
-          <Button
-            color="primary"
-            variant="flat"
-            onPress={() => setIsLoggedIn(true)}
-          >
+          <Button color="primary" variant="flat" onPress={handleSignIn}>
             Sign In
           </Button>
         )}
