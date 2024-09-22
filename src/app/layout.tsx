@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { SessionProvider } from "next-auth/react";
 
@@ -30,7 +31,9 @@ export default function RootLayout({
         <SessionProvider>
           <Provider>
             <CustomNavbar />
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow">
+              <Suspense>{children}</Suspense>
+            </main>
           </Provider>
         </SessionProvider>
       </body>
