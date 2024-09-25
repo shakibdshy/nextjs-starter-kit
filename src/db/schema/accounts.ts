@@ -1,10 +1,10 @@
-import { pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
 
 export const accounts = pgTable("account", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("userId")
+  id: serial("id").primaryKey(),
+  userId: serial("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   type: varchar("type", { length: 255 })

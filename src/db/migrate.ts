@@ -1,9 +1,9 @@
-import { migrate } from "drizzle-orm/postgres-js/migrator";
+import { migrate } from "drizzle-orm/neon-http/migrator";
 
 import config from "@/../drizzle.config";
-import { env } from "@/env/server";
+import { env } from "@/env/env.mjs";
 
-import db, { client } from "./index";
+import db from "./index";
 
 if (!env.DB_MIGRATING) {
   throw new Error(
@@ -16,6 +16,4 @@ try {
 } catch (error) {
   console.error("Migration failed:", error);
   process.exit(1);
-} finally {
-  await client.end();
 }

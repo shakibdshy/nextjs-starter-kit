@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "account" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"userId" uuid NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
+	"userId" serial NOT NULL,
 	"type" varchar(255) NOT NULL,
 	"provider" varchar(255) NOT NULL,
 	"providerAccountId" varchar(255) NOT NULL,
@@ -15,12 +15,12 @@ CREATE TABLE IF NOT EXISTS "account" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "session" (
 	"sessionToken" text PRIMARY KEY NOT NULL,
-	"userId" uuid NOT NULL,
+	"userId" serial NOT NULL,
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(255) DEFAULT '',
 	"email" varchar(320) NOT NULL,
 	"emailVerified" timestamp,

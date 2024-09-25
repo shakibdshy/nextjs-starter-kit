@@ -9,11 +9,12 @@
     "lint": "next lint",
     "db:push": "npx drizzle-kit push",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:migrate": "cross-env DB_MIGRATING=true drizzle-kit migrate",
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.5.0",
+    "@neondatabase/serverless": "^0.9.5",
     "@nextui-org/react": "^2.4.8",
     "@t3-oss/env-nextjs": "^0.11.1",
     "@tabler/icons-react": "^3.17.0",
@@ -26,7 +27,6 @@
     "next": "14.2.12",
     "next-auth": "^5.0.0-beta.21",
     "next-themes": "^0.3.0",
-    "postgres": "^3.4.4",
     "react": "^18",
     "react-dom": "^18",
     "zod": "^3.23.8"
