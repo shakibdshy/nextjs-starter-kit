@@ -1,22 +1,20 @@
-import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+import { AdapterAccount } from "next-auth/adapters";
 
 import { users } from "./users";
 
 export const accounts = pgTable("account", {
-  id: serial("id").primaryKey(),
-  userId: serial("userId")
+  userId: uuid("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  type: varchar("type", { length: 255 })
-    .$type<"oauth" | "email" | "credentials">()
-    .notNull(),
-  provider: varchar("provider", { length: 255 }).notNull(),
-  providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+  type: text("type").$type<AdapterAccount>().notNull(),
+  provider: text("provider").notNull(),
+  providerAccountId: text("providerAccountId").notNull(),
   refresh_token: text("refresh_token"),
   access_token: text("access_token"),
   expires_at: varchar("expires_at", { length: 255 }),
-  token_type: varchar("token_type", { length: 255 }),
-  scope: varchar("scope", { length: 255 }),
+  token_type: text("token_type"),
+  scope: text("scope"),
   id_token: text("id_token"),
-  session_state: varchar("session_state", { length: 255 }),
+  session_state: text("session_state"),
 });

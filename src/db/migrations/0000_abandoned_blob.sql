@@ -1,30 +1,29 @@
 CREATE TABLE IF NOT EXISTS "account" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"userId" serial NOT NULL,
-	"type" varchar(255) NOT NULL,
-	"provider" varchar(255) NOT NULL,
-	"providerAccountId" varchar(255) NOT NULL,
+	"userId" uuid NOT NULL,
+	"type" text NOT NULL,
+	"provider" text NOT NULL,
+	"providerAccountId" text NOT NULL,
 	"refresh_token" text,
 	"access_token" text,
 	"expires_at" varchar(255),
-	"token_type" varchar(255),
-	"scope" varchar(255),
+	"token_type" text,
+	"scope" text,
 	"id_token" text,
-	"session_state" varchar(255)
+	"session_state" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "session" (
 	"sessionToken" text PRIMARY KEY NOT NULL,
-	"userId" serial NOT NULL,
+	"userId" uuid NOT NULL,
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(255) DEFAULT '',
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" varchar(255),
 	"email" varchar(320) NOT NULL,
 	"emailVerified" timestamp,
-	"image" varchar(2048) DEFAULT '',
+	"image" varchar(2048) NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
