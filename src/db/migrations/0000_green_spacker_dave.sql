@@ -23,7 +23,10 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"name" varchar(255),
 	"email" varchar(320) NOT NULL,
 	"emailVerified" timestamp,
+	"password" varchar(255) NOT NULL,
 	"image" varchar(2048) NOT NULL,
+	"createdAt" timestamp DEFAULT now(),
+	"updatedAt" timestamp DEFAULT now(),
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

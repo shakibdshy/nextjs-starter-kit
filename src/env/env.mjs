@@ -14,6 +14,8 @@ export const env = createEnv({
     AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
+    AUTH_GITHUB_ID: z.string(),
+    AUTH_GITHUB_SECRET: z.string(),
     DB_MIGRATING: z
       .string()
       .refine((s) => s === "true" || s === "false")
