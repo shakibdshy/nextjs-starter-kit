@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -33,13 +33,22 @@ const navigationItems = [
 export default function CustomNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      const refreshSession = async () => {
+        await update();
+      };
+      refreshSession();
+    }
+  }, [status, update]);
 
   const handleSignOut = () => {
     signOut();
   };
 
-  console.log("image", session?.user?.image!);
+  console.log("session", session);
 
   return (
     <>

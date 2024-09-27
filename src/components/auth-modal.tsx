@@ -12,7 +12,7 @@ import {
   ModalContent,
   ModalHeader,
 } from "@nextui-org/react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 
 import { signInAction } from "@/actions/signin-action";
@@ -34,6 +34,7 @@ export function AuthModal({
   onClose: () => void;
 }) {
   const [mode, setMode] = useState<AuthMode>("signin");
+  const { update } = useSession();
 
   const signInForm = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -51,6 +52,7 @@ export function AuthModal({
       console.error(result.error);
       // Handle error (e.g., show error message to user)
     } else {
+      update();
       onClose();
     }
   };
@@ -61,8 +63,8 @@ export function AuthModal({
       console.error(result.error);
       // Handle error (e.g., show error message to user)
     } else {
-      setMode("signin");
-      // Optionally show a success message
+      update();
+      onClose();
     }
   };
 
