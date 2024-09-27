@@ -17,25 +17,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       async authorize(credentials) {
-        const validatedFields = signInSchema.safeParse(credentials);
+        const { email, password } = await signInSchema.parseAsync(credentials);
 
-        if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
-          const user = await getUserByEmail(email);
+        const user = await getUserByEmail(email);
 
-          if (!user || !user.password) return null;
+        if (!user || !user.password) return null;
 
-          const isPasswordCorrect = await bcrypt.compare(
-            password,
-            user.password
-          );
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-          if (!isPasswordCorrect) return null;
+        if (!isPasswordCorrect) return null;
 
-          return user;
+        if (!user) {
+          throw new Error("User not found.");
         }
 
-        return null;
+        return user;
       },
     }),
     Google({

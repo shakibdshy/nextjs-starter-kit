@@ -12,6 +12,7 @@ import {
   ModalContent,
   ModalHeader,
 } from "@nextui-org/react";
+import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { signIn, useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -172,7 +173,12 @@ export function AuthModal({
               </Button>
             </form>
           )}
-          <Button onPress={() => signIn("google")}>Continue with Google</Button>
+          <Button variant="bordered" onPress={() => signIn("github")}>
+            <IconBrandGithub /> Continue with GitHub
+          </Button>
+          <Button variant="bordered" onPress={() => signIn("google")}>
+            <IconBrandGoogle /> Continue with Google
+          </Button>
           <Link href="#" onPress={toggleMode}>
             {mode === "signin"
               ? "Need an account? Sign up"
