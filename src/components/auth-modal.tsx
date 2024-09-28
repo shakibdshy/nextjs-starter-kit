@@ -51,7 +51,6 @@ export function AuthModal({
     const result = await signInAction(data);
     if (result.error) {
       console.error(result.error);
-      // Handle error (e.g., show error message to user)
     } else {
       update();
       onClose();
@@ -62,7 +61,6 @@ export function AuthModal({
     const result = await signUpAction(data);
     if (result.error) {
       console.error(result.error);
-      // Handle error (e.g., show error message to user)
     } else {
       update();
       onClose();

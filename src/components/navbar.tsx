@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   Button,
@@ -10,6 +9,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -24,7 +24,12 @@ import { signOut, useSession } from "next-auth/react";
 import { AuthModal } from "./auth-modal";
 import { ThemeSwitcher } from "./theme-switcher";
 
-const navigationItems = [
+interface NavigationItem {
+  name: string;
+  href: string;
+}
+
+const navigationItems: NavigationItem[] = [
   { name: "Home", href: "/" },
   { name: "Profile", href: "/profile" },
   { name: "Account", href: "/account" },
@@ -33,22 +38,11 @@ const navigationItems = [
 export default function CustomNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const { data: session, status, update } = useSession();
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      const refreshSession = async () => {
-        await update();
-      };
-      refreshSession();
-    }
-  }, [status, update]);
+  const { data: session, status } = useSession();
 
   const handleSignOut = () => {
     signOut();
   };
-
-  console.log("session", session);
 
   return (
     <>
@@ -61,7 +55,7 @@ export default function CustomNavbar() {
           <NavbarBrand>
             <Link
               href="/"
-              className="flex items-center gap-2 text-lg font-bold"
+              className="flex items-center gap-2 text-xl font-bold"
             >
               <IconPackage />
               Next.js Starter Kit
@@ -72,21 +66,32 @@ export default function CustomNavbar() {
         <NavbarContent className="hidden gap-4 sm:flex" justify="center">
           {navigationItems.map((item) => (
             <NavbarItem key={item.name}>
-              <Link href={item.href}>{item.name}</Link>
+              <Link
+                href={item.href}
+                color="primary"
+                size="lg"
+                className="font-semibold"
+              >
+                {item.name}
+              </Link>
             </NavbarItem>
           ))}
         </NavbarContent>
 
         <NavbarContent justify="end">
           <ThemeSwitcher />
-          {status === "authenticated" && session?.user ? (
+          {status === "loading" ? (
+            <Button isLoading variant="light">
+              Loading...
+            </Button>
+          ) : status === "authenticated" && session?.user ? (
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
                 <Button isIconOnly variant="light" aria-label="Profile">
-                  {session.user ? (
+                  {session.user.image ? (
                     <Image
-                      src={session.user.image!}
-                      alt={session.user.name!}
+                      src={session.user.image}
+                      alt={session.user.name || "User"}
                       width={100}
                       height={100}
                     />

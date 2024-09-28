@@ -1,67 +1,78 @@
+import { JWT, JWTEncodeParams } from "@auth/core/jwt";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import { v4 as uuid } from "uuid";
 
-import { getUserByEmail } from "@/actions/user-action";
 import db from "@/db";
-import { sessions } from "@/db/schema";
-import { env } from "@/env/env.mjs";
-import { signInSchema } from "@/utils/validations/auth.schema";
+import { getUserByEmail } from "@/service/user";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db),
+const adapter = DrizzleAdapter(db);
+
+const authConfig: NextAuthConfig = {
+  adapter,
   providers: [
+    GitHub,
+    Google,
     Credentials({
+      credentials: {
+        email: {},
+        password: {},
+      },
       async authorize(credentials) {
-        const { email, password } = await signInSchema.parseAsync(credentials);
+        const { email } = credentials;
 
-        const user = await getUserByEmail(email);
+        const res = await getUserByEmail(email as string);
 
-        if (!user || !user.password) return null;
-
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordCorrect) return null;
-
-        if (!user) {
-          throw new Error("User not found.");
+        if (res) {
+          return res;
         }
 
-        return user;
+        return null;
       },
     }),
-    Google({
-      clientId: env.AUTH_GOOGLE_ID,
-      clientSecret: env.AUTH_GOOGLE_SECRET,
-    }),
-    GitHub({
-      clientId: env.AUTH_GITHUB_ID,
-      clientSecret: env.AUTH_GITHUB_SECRET,
-    }),
   ],
-  pages: {
-    signIn: "/",
-  },
-  secret: env.AUTH_SECRET,
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        // Fetch the latest session from the database
-        const dbSession = await db.query.sessions.findFirst({
-          where: eq(sessions.userId, user.id),
-          orderBy: (sessions, { desc }) => [desc(sessions.expires)],
-        });
-        if (dbSession) {
-          session.expires = new Date(dbSession.expires) as unknown as Date &
-            string;
-        }
+    async jwt({ token, user, account }) {
+      if (account?.provider === "credentials") {
+        token.credentials = true;
       }
-      return session;
+      return token;
     },
   },
-});
+  jwt: {
+    encode: async function (params) {
+      if (params.token?.credentials) {
+        const sessionToken = uuid();
+
+        if (!params.token.sub) {
+          throw new Error("No user ID found in token");
+        }
+
+        const createdSession = await adapter?.createSession?.({
+          sessionToken: sessionToken,
+          userId: params.token.sub,
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        });
+
+        if (!createdSession) {
+          throw new Error("Failed to create session");
+        }
+
+        return sessionToken;
+      }
+      return defaultEncode(params);
+    },
+  },
+  secret: process.env.AUTH_SECRET!,
+};
+
+export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
+
+function defaultEncode(
+  params: JWTEncodeParams<JWT>
+): string | PromiseLike<string> {
+  throw new Error("Function not implemented.");
+}
