@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
-  Input,
   Link,
   Modal,
   ModalBody,
@@ -14,16 +12,12 @@ import {
 } from "@nextui-org/react";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { signIn, useSession } from "next-auth/react";
-import { Controller, useForm } from "react-hook-form";
 
 import { signInAction } from "@/actions/signin-action";
 import { signUpAction } from "@/actions/signup-action";
-import {
-  SignInSchema,
-  SignUpSchema,
-  signInSchema,
-  signUpSchema,
-} from "@/utils/validations/auth.schema";
+import { SignInSchema, SignUpSchema } from "@/utils/validations/auth.schema";
+
+import { AuthForm } from "./auth-form";
 
 type AuthMode = "signin" | "signup";
 
@@ -36,16 +30,6 @@ export function AuthModal({
 }) {
   const [mode, setMode] = useState<AuthMode>("signin");
   const { update } = useSession();
-
-  const signInForm = useForm<SignInSchema>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: { email: "", password: "" },
-  });
-
-  const signUpForm = useForm<SignUpSchema>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: { email: "", password: "", fName: "", lName: "" },
-  });
 
   const handleSignIn = async (data: SignInSchema) => {
     const result = await signInAction(data);
@@ -68,7 +52,7 @@ export function AuthModal({
   };
 
   const toggleMode = () => {
-    setMode(mode === "signin" ? "signup" : "signin");
+    setMode((prevMode) => (prevMode === "signin" ? "signup" : "signin"));
   };
 
   return (
@@ -76,101 +60,12 @@ export function AuthModal({
       <ModalContent>
         <ModalHeader>{mode === "signin" ? "Sign In" : "Sign Up"}</ModalHeader>
         <ModalBody>
-          {mode === "signin" ? (
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={signInForm.handleSubmit(handleSignIn)}
-            >
-              <Controller
-                name="email"
-                control={signInForm.control}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    label="Email"
-                    type="email"
-                    isInvalid={!!error?.message}
-                    errorMessage={error?.message}
-                  />
-                )}
-              />
-              <Controller
-                name="password"
-                control={signInForm.control}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    label="Password"
-                    type="password"
-                    isInvalid={!!error?.message}
-                    errorMessage={error?.message}
-                  />
-                )}
-              />
-              <Button type="submit" color="primary">
-                Sign In
-              </Button>
-            </form>
-          ) : (
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={signUpForm.handleSubmit(handleSignUp)}
-            >
-              <Controller
-                name="fName"
-                control={signUpForm.control}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    label="First Name"
-                    isInvalid={!!error?.message}
-                    errorMessage={error?.message}
-                  />
-                )}
-              />
-              <Controller
-                name="lName"
-                control={signUpForm.control}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    label="Last Name"
-                    isInvalid={!!error?.message}
-                    errorMessage={error?.message}
-                  />
-                )}
-              />
-              <Controller
-                name="email"
-                control={signUpForm.control}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    label="Email"
-                    type="email"
-                    isInvalid={!!error?.message}
-                    errorMessage={error?.message}
-                  />
-                )}
-              />
-              <Controller
-                name="password"
-                control={signUpForm.control}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    label="Password"
-                    type="password"
-                    isInvalid={!!error?.message}
-                    errorMessage={error?.message}
-                  />
-                )}
-              />
-              <Button type="submit" color="primary">
-                Sign Up
-              </Button>
-            </form>
-          )}
+          <AuthForm
+            mode={mode}
+            // TODO: Add error handling
+            // @ts-ignore
+            onSubmit={mode === "signin" ? handleSignIn : handleSignUp}
+          />
           <Button variant="bordered" onPress={() => signIn("github")}>
             <IconBrandGithub /> Continue with GitHub
           </Button>
