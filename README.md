@@ -1,36 +1,177 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Starter Kit
+
+Welcome to the Next.js Starter Kit, an open-source template designed to help you build high-performance, maintainable, and enjoyable applications. This template comes pre-configured with a variety of tools and features to accelerate your development process.
+
+## Features
+
+- **Next.js**: The React framework for production.
+- **TypeScript**: Strongly typed programming language that builds on JavaScript.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **ESLint**: A tool for identifying and fixing problems in JavaScript code.
+- **Prettier**: An opinionated code formatter.
+- **NextAuth.js v5**: Authentication for Next.js applications.
+- **NextUI**: A React UI library for building modern web applications.
+- **Drizzle ORM**: A lightweight TypeScript ORM for SQL databases.
+- **Neon DB**: Neon is a serverless open-source database that allows you to build and deploy databases with a few clicks.
+
+## Table of Contents
+
+- [Next.js Starter Kit](#nextjs-starter-kit)
+  - [Features](#features)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Running the Development Server](#running-the-development-server)
+    - [Building for Production](#building-for-production)
+    - [Starting the Production Server](#starting-the-production-server)
+  - [Deployment](#deployment)
+  - [Scripts Overview](#scripts-overview)
+  - [State Management](#state-management)
+    - [Zustand](#zustand)
+    - [Jotai](#jotai)
+    - [Recoil](#recoil)
+  - [Environment Variables Handling](#environment-variables-handling)
+  - [Contribution](#contribution)
+  - [Support](#support)
+  - [License](#license)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (>= 14.x)
+- [npm](https://www.npmjs.com/) (>= 6.x) or [yarn](https://yarnpkg.com/) (>= 1.x)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/nextjs-starter-template.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd nextjs-starter-template
+   ```
+
+3. Install the dependencies:
+
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+
+### Running the Development Server
+
+To start the development server, run:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 # or
 bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To create an optimized production build, run:
 
-## Learn More
+```bash
+npm run build
+# or
+bun build
+```
 
-To learn more about Next.js, take a look at the following resources:
+This will create a `build` directory with the production build of your application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Starting the Production Server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+After building the application, you can start the production server with:
 
-## Deploy on Vercel
+```bash
+npm run start
+# or
+bun start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Instructions for deploying the application will go here.
+
+## Scripts Overview
+
+- `bun dev`: Starts the development server.
+- `bun build`: Builds the application for production.
+- `bun start`: Starts the production server.
+- `bun lint`: Runs ESLint to identify and fix problems in the code.
+- `bun db:generate`: Generates the database schema.
+- `bun db:migrate`: Migrates the database schema.
+- `bun db:studio`: Opens the Neon DB Studio.
+- `bun db:push`: Pushes the database schema to the Neon DB.
+-
+
+## State Management
+
+### Zustand
+
+Details about using Zustand for state management will go here.
+
+### Jotai
+
+Details about using Jotai for state management will go here.
+
+### Recoil
+
+Details about using Recoil for state management will go here.
+
+## Environment Variables Handling
+
+[T3 Env](https://env.t3.gg/) is a library that provides environmental variables checking at build time, type validation and transforming. It ensures that your application is using the correct environment variables and their values are of the expected type. You’ll never again struggle with runtime errors caused by incorrect environment variable usage.
+
+Config file is located at env.mjs. Simply set your client and server variables and import env from any file in your project.
+
+```env
+export const env = createEnv({
+    server: {
+        NODE_ENV: z.enum(["development", "production"]),
+        DB_HOST: z.string(),
+        DB_USER: z.string(),
+        DB_PASSWORD: z.string(),
+        DB_NAME: z.string(),
+        DB_PORT: z.coerce.number(),
+        DATABASE_URL: z.string().url(),
+    },
+    emptyStringAsUndefined: true,
+    experimental__runtimeEnv: process.env,
+})
+```
+
+If the required environment variables are not set, you'll get an error message:
+
+```bash
+  ❌ Invalid environment variables: { SECRET_KEY: [ 'Required' ] }
+```
+
+## Contribution
+
+Contributions are always welcome! To contribute, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch with a descriptive name.
+3. Push your changes to the forked repository.
+4. Create a pull request, and we'll review your changes.
+
+## Support
+
+For support, please open an issue on the GitHub repository.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
