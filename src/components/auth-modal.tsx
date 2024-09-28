@@ -63,7 +63,7 @@ export function AuthModal({
           <AuthForm
             mode={mode}
             // TODO: Add error handling
-            // @ts-ignore
+            // @ts-expect-error Fix this
             onSubmit={mode === "signin" ? handleSignIn : handleSignUp}
           />
           <Button variant="bordered" onPress={() => signIn("github")}>

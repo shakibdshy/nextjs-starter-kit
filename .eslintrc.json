@@ -7,6 +7,7 @@
     "semi": ["error"],
     "quotes": ["error", "double"],
     "n/no-process-env": ["error"],
+    "@typescript-eslint/no-explicit-any": "off",
     "check-file/filename-naming-convention": [
       "error",
       {

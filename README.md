@@ -115,7 +115,6 @@ Instructions for deploying the application will go here.
 - `bun db:migrate`: Migrates the database schema.
 - `bun db:studio`: Opens the Neon DB Studio.
 - `bun db:push`: Pushes the database schema to the Neon DB.
--
 
 ## State Management
 

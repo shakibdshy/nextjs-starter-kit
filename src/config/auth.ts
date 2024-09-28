@@ -1,4 +1,3 @@
-import { JWT, JWTEncodeParams } from "@auth/core/jwt";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -35,7 +34,7 @@ const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, account }) {
       if (account?.provider === "credentials") {
         token.credentials = true;
       }
@@ -63,16 +62,10 @@ const authConfig: NextAuthConfig = {
 
         return sessionToken;
       }
+      // @ts-expect-error next-auth doesn't have a default encode function
       return defaultEncode(params);
     },
   },
-  secret: process.env.AUTH_SECRET!,
 };
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
-
-function defaultEncode(
-  params: JWTEncodeParams<JWT>
-): string | PromiseLike<string> {
-  throw new Error("Function not implemented.");
-}
