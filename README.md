@@ -42,8 +42,8 @@ Welcome to the Next.js Starter Kit, an open-source template designed to help you
 
 Make sure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (>= 14.x)
-- [npm](https://www.npmjs.com/) (>= 6.x) or [yarn](https://yarnpkg.com/) (>= 1.x)
+- [Node.js](https://nodejs.org/) (>= 18.x)
+- [npm](https://www.npmjs.com/) (>= 6.x) or [bun](https://bun.sh/) (>= 0.5.x)
 
 ### Installation
 
