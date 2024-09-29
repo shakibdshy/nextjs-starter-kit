@@ -1,5 +1,10 @@
 import Image from "next/image";
 
+import { Link, button } from "@nextui-org/react";
+import { IconBrandGithub } from "@tabler/icons-react";
+
+import cn from "@/utils/class-name";
+
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
@@ -24,8 +29,10 @@ export default function Home() {
         </ol>
 
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <a
-            className="flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent bg-foreground px-4 text-sm text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] sm:h-12 sm:px-5 sm:text-base"
+          <Link
+            className={cn(
+              button({ variant: "shadow", color: "primary", size: "lg" })
+            )}
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
@@ -38,20 +45,22 @@ export default function Home() {
               height={20}
             />
             Deploy now
-          </a>
-
-          <a
-            className="flex h-10 items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base"
+          </Link>
+          <Link
+            className={cn(
+              button({ variant: "flat", color: "primary", size: "lg" })
+            )}
             href="https://github.com/shakibdshy/nextjs-starter-kit?tab=readme-ov-file#nextjs-starter-kit"
             target="_blank"
             rel="noopener noreferrer"
           >
+            <IconBrandGithub />
             Read our docs
-          </a>
+          </Link>
         </div>
       </main>
       <footer className="row-start-3 flex flex-wrap items-center justify-center gap-6">
-        <a
+        <Link
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
@@ -65,23 +74,9 @@ export default function Home() {
             height={16}
           />
           Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
+        </Link>
+
+        <Link
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
@@ -95,7 +90,7 @@ export default function Home() {
             height={16}
           />
           Go to nextjs.org →
-        </a>
+        </Link>
       </footer>
     </div>
   );
